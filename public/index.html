@@ -1,13 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    <title>demo</title>
 </head>
+
 <body>
     <form action="/info" method="post">
-        <label for="user">test</label>
+        <label for="user">search mysql</label>
         <br>
         <input type="text" id="user" name="user">
         <br>
@@ -21,5 +24,46 @@
         <br>
         <input type="submit">
     </form>
+    <br>
+    <p>test</p>
+    <select name="select" id="select"></select>
+    <button onclick="reload_model()">reload</button>
+    <br>
+    <button onclick="test()">download</button>
+    <script>
+        function reload_model() {
+            $.ajax({
+                type: 'get',
+                url: '/reload',
+                success: function (result) {
+                    const selectElement = document.getElementById('select');
+                    const filenames = result;
+                    selectElement.innerHTML = '';
+                    filenames.forEach((filename) => {
+                        const option = document.createElement('option');
+                        option.value = filename;
+                        option.text = filename;
+                        selectElement.appendChild(option);
+                    });
+                    // alert(result);
+                },
+                error: function () {
+                    alert('error')
+                }
+            })
+        }
+    </script>
+    <script>
+        function test() {
+            const link = document.createElement('a');
+            const select_element = document.getElementById('select')
+            const selected_option = select_element.value
+            link.href = '/download/' + selected_option;
+            link.click();
+            // console.log('work')
+        }
+    </script>
+    <script>reload_model()</script>
 </body>
+
 </html>
